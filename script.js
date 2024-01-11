@@ -1,5 +1,5 @@
 let x, y, op;
-x = y = op = '';
+const EMPTY = '';
 
 const operators = {
     '+': add,
@@ -8,6 +8,7 @@ const operators = {
     '÷': divide,
 }
 
+clear();
 const currentDisplay = document.querySelector('#display #current');
 
 function add(a, b) {
@@ -32,14 +33,28 @@ function operate(a, op, b) {
 
 function evaluate() {
     if (x && op && y) {
-        x = operate(+x, operators[op], +y);
-        op = '';
-        y = '';
+        x = operate(+x, operators[op], +y) + '';
+        op = EMPTY;
+        y = EMPTY;
+    }
+}
+
+function clear() {
+    x = y = op = EMPTY;
+}
+
+function backspace() {
+    if (y) {
+        y = y.slice(0, -1);
+    } else if (op) {
+        op = op.slice(0, -1);
+    } else {
+        x = x.slice(0, -1);
     }
 }
 
 function updateDisplay() {
-    currentDisplay.value = `${x ? x + ' ' : ''}${x && op ? op + ' ' : ''}${y ? y + ' ' : ''}`;
+    currentDisplay.value = x + (op && ' ') + op + (y && ' ') + y;
 }
 
 document.querySelector('#controls').addEventListener('click', event => {
@@ -65,6 +80,10 @@ document.querySelector('#controls').addEventListener('click', event => {
 
     } else if (btnTxt === '=') {
         evaluate();
+    } else if (btnTxt === 'AC') {
+        clear();
+    } else if (btnTxt === 'DEL') {
+        backspace();
     }
 
     updateDisplay();
