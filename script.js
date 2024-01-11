@@ -8,6 +8,12 @@ const operators = {
     '÷': divide,
 }
 
+const actions = {
+    '=': evaluate,
+    'DEL': backspace,
+    'AC': clear,
+}
+
 clear();
 const currentDisplay = document.querySelector('#display #current');
 
@@ -78,12 +84,8 @@ document.querySelector('#controls').addEventListener('click', event => {
 
         op = btnTxt;
 
-    } else if (btnTxt === '=') {
-        evaluate();
-    } else if (btnTxt === 'AC') {
-        clear();
-    } else if (btnTxt === 'DEL') {
-        backspace();
+    } else if (btnTxt in actions) {
+        actions[btnTxt]();
     }
 
     updateDisplay();
