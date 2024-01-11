@@ -1,5 +1,8 @@
 let x, y, op;
+
 const EMPTY = '';
+const currentDisplay = document.querySelector('#display #current');
+const previousDisplay = document.querySelector('#display #previous');
 
 const operators = {
     '+': add,
@@ -9,7 +12,6 @@ const operators = {
     '^': power,
     '%': modulo,
 }
-
 const actions = {
     '=': evaluate,
     'DEL': backspace,
@@ -17,7 +19,6 @@ const actions = {
 }
 
 clear();
-const currentDisplay = document.querySelector('#display #current');
 
 function add(a, b) {
     return a + b;
@@ -49,14 +50,11 @@ function operate(a, op, b) {
 
 function evaluate() {
     if (x && op && y) {
+        updatePreviousDisplay();
         x = operate(+x, operators[op], +y) + '';
         op = EMPTY;
         y = EMPTY;
     }
-}
-
-function clear() {
-    x = y = op = EMPTY;
 }
 
 function backspace() {
@@ -69,8 +67,27 @@ function backspace() {
     }
 }
 
-function updateDisplay() {
+function clear() {
+    x = y = op = EMPTY;
+    previousDisplay.value = '';
+}
+
+function updateCurrentDisplay() {
     currentDisplay.value = x + (op && ' ') + op + (y && ' ') + y;
+}
+
+function updatePreviousDisplay() {
+    previousDisplay.value = `${x} ${op} ${y} =`;
+}
+
+function getModifiedNumber(number, modifier){
+    if(modifier !== '.' || !number.includes('.')) {
+        number += modifier;
+    } else if (number === '0') {
+        number = modifier;
+    }
+
+    return number;
 }
 
 document.querySelector('#controls').addEventListener('click', event => {
@@ -78,12 +95,12 @@ document.querySelector('#controls').addEventListener('click', event => {
 
     const btnTxt = event.target.textContent;
 
-    if ('0' <= btnTxt && btnTxt <= '9') {
+    if ('0' <= btnTxt && btnTxt <= '9' || btnTxt === '.') {
 
         if (op) {
-            y += btnTxt;
+            y = getModifiedNumber(y, btnTxt);
         } else {
-            x += btnTxt;
+            x = getModifiedNumber(x, btnTxt);
         }
 
     } else if (btnTxt in operators) {
@@ -98,5 +115,5 @@ document.querySelector('#controls').addEventListener('click', event => {
         actions[btnTxt]();
     }
 
-    updateDisplay();
+    updateCurrentDisplay();
 });
