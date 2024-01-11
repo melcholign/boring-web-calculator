@@ -1,5 +1,4 @@
 * {
-    border: 2px solid black;
 }
 
 body {
@@ -38,28 +37,41 @@ footer a {
     gap: 10px;
 }
 
+main {
+    border: 5px solid black;
+    border-radius: 10px;
+    padding: 40px 20px;
+}
+
+#display {
+    margin-bottom: 40px;
+}
+
 #display input {
     box-sizing: border-box;
-    width: 440px;
+    width: 340px;
+    border: 2px solid black;
     padding: 10px;
     padding-right: 20px;
     text-align: right;
+    color: black;
 
     display: block;
 }
 
 #display #previous {
-    font-size: 24px;
+    border-bottom: 0px;
     border-radius: 10px 10px 0px 0px;
+    font-size: 24px;
 }
 
 #display #current {
-    font-size: 32px;
     border-radius: 0px 0px 10px 10px;
+    font-size: 32px;
 }
 
 #controls {
-    width: 440px;
+    width: 340px;
     display: flex;
     justify-content: flex-end;
     gap: 10px;
@@ -68,8 +80,9 @@ footer a {
 
 #controls button {
     box-sizing: border-box;
-    width: 80px;
-    height: 50px;
+    width: 60px;
+    height: 40px;
+    border: 2px solid black;
     border-radius: 5px 5px 20px 20px;
     font-size: 24px;
     font-weight: bold;
