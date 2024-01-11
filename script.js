@@ -6,6 +6,8 @@ const operators = {
     '-': subtract,
     '×': multiply,
     '÷': divide,
+    '^': power,
+    '%': modulo,
 }
 
 const actions = {
@@ -31,6 +33,14 @@ function multiply(a, b) {
 
 function divide(a, b) {
     return a / b;
+}
+
+function power(a, b) {
+    return a ** b;
+}
+
+function modulo(a, b) {
+    return a % b;
 }
 
 function operate(a, op, b) {
