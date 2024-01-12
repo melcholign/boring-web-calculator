@@ -2,7 +2,7 @@ let x, y, op;
 
 const EMPTY = '';
 const currentDisplay = document.querySelector('#display #current');
-const previousDisplay = document.querySelector('#display #previous');
+const suggestionDisplay = document.querySelector('#display #suggestion');
 
 const operators = {
     '+': add,
@@ -50,7 +50,7 @@ function operate(a, op, b) {
 
 function evaluate() {
     if (x && op && y) {
-        updatePreviousDisplay();
+        updateSuggestionDisplay();
         x = operate(+x, operators[op], +y) + '';
         op = EMPTY;
         y = EMPTY;
@@ -69,15 +69,15 @@ function backspace() {
 
 function clear() {
     x = y = op = EMPTY;
-    previousDisplay.value = '';
+    suggestionDisplay.value = '';
 }
 
 function updateCurrentDisplay() {
     currentDisplay.value = x + (op && ' ') + op + (y && ' ') + y;
 }
 
-function updatePreviousDisplay() {
-    previousDisplay.value = `${x} ${op} ${y} =`;
+function updateSuggestionDisplay() {
+    suggestionDisplay.value = y && operate(+x, operators[op], +y);
 }
 
 function getModifiedNumber(number, modifier){
@@ -115,5 +115,6 @@ document.querySelector('#controls').addEventListener('click', event => {
         actions[btnTxt]();
     }
 
+    updateSuggestionDisplay();
     updateCurrentDisplay();
 });
