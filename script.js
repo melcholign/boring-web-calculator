@@ -104,29 +104,29 @@ function roundToNDecimals(number, n) {
     return Math.floor(number * powerOfTen) / (powerOfTen);
 }
 
-function respondToEvent(key) {
-    if ('0' <= key && key <= '9' || key === '.') {
+function respondToEvent(input) {
+    if ('0' <= input && input <= '9' || input === '.') {
 
         error = false;
 
         if (op) {
-            y = getModifiedNumber(y, key);
+            y = getModifiedNumber(y, input);
         } else {
-            x = getModifiedNumber(x, key);
+            x = getModifiedNumber(x, input);
         }
 
-    } else if (key in operators) {
+    } else if (input in operators) {
 
         if (y) {
             evaluate();
         }
 
         if (x) {
-            op = key;
+            op = input;
         }
 
-    } else if (key in actions) {
-        actions[key]();
+    } else if (input in actions) {
+        actions[input]();
     }
 
     updateSuggestionDisplay();
@@ -136,7 +136,7 @@ function respondToEvent(key) {
 document.querySelector('#controls').addEventListener('click', event => {
     if (event.target.tagName !== 'BUTTON') return;
 
-    const key = event.target.textContent;
+    const input = event.target.textContent;
 
-    respondToEvent(key);
+    respondToEvent(input);
 });
