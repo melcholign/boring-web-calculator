@@ -1,6 +1,7 @@
 let x, y, op;
 
 const EMPTY = '';
+const decimalFigures = 6;
 const currentDisplay = document.querySelector('#display #current');
 const suggestionDisplay = document.querySelector('#display #suggestion');
 
@@ -51,7 +52,7 @@ function operate(a, op, b) {
 function evaluate() {
     if (x && op && y) {
         updateSuggestionDisplay();
-        x = operate(+x, operators[op], +y) + '';
+        x = roundToNDecimals(operate(+x, operators[op], +y) + '', decimalFigures);
         op = EMPTY;
         y = EMPTY;
     }
@@ -77,7 +78,7 @@ function updateCurrentDisplay() {
 }
 
 function updateSuggestionDisplay() {
-    suggestionDisplay.value = y && operate(+x, operators[op], +y);
+    suggestionDisplay.value = y && roundToNDecimals(operate(+x, operators[op], +y), decimalFigures);
 }
 
 function getModifiedNumber(number, modifier){
@@ -88,6 +89,11 @@ function getModifiedNumber(number, modifier){
     }
 
     return number;
+}
+
+function roundToNDecimals(number, n) {
+    const powerOfTen = 10 ** n;
+    return Math.floor(number * powerOfTen) / (powerOfTen);
 }
 
 document.querySelector('#controls').addEventListener('click', event => {
