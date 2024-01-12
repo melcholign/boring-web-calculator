@@ -1,6 +1,8 @@
 let x, y, op;
+let error = false;
 
 const EMPTY = '';
+const MATH_ERROR = 'Math Error';
 const decimalFigures = 6;
 const currentDisplay = document.querySelector('#display #current');
 const suggestionDisplay = document.querySelector('#display #suggestion');
@@ -56,6 +58,11 @@ function evaluate() {
         op = EMPTY;
         y = EMPTY;
     }
+
+    if (!isFinite(x)) {
+        error = true;
+        x = '';
+    }
 }
 
 function backspace() {
@@ -70,22 +77,23 @@ function backspace() {
 
 function clear() {
     x = y = op = EMPTY;
-    suggestionDisplay.value = '';
+    error = false;
 }
 
 function updateCurrentDisplay() {
-    currentDisplay.value = x + (op && ' ') + op + (y && ' ') + y;
+    currentDisplay.value = error ? MATH_ERROR : x + (op && ' ') + op + (y && ' ') + y;
 }
 
 function updateSuggestionDisplay() {
-    suggestionDisplay.value = y && roundToNDecimals(operate(+x, operators[op], +y), decimalFigures);
+    const suggestion = y && roundToNDecimals(operate(+x, operators[op], +y), decimalFigures);
+    suggestionDisplay.value = (!isFinite(suggestion)) ? MATH_ERROR : suggestion;
 }
 
-function getModifiedNumber(number, modifier){
-    if(modifier !== '.' || !number.includes('.')) {
-        number += modifier;
-    } else if (number === '0') {
+function getModifiedNumber(number, modifier) {
+    if (number === '0') {
         number = modifier;
+    } else if (modifier !== '.' || !number.includes('.')) {
+        number += modifier;
     }
 
     return number;
@@ -103,6 +111,8 @@ document.querySelector('#controls').addEventListener('click', event => {
 
     if ('0' <= btnTxt && btnTxt <= '9' || btnTxt === '.') {
 
+        error = false;
+
         if (op) {
             y = getModifiedNumber(y, btnTxt);
         } else {
@@ -115,7 +125,9 @@ document.querySelector('#controls').addEventListener('click', event => {
             evaluate();
         }
 
-        op = btnTxt;
+        if (x) {
+            op = btnTxt;
+        }
 
     } else if (btnTxt in actions) {
         actions[btnTxt]();
