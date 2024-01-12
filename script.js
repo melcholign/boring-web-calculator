@@ -54,7 +54,7 @@ function operate(a, op, b) {
 function evaluate() {
     if (x && op && y) {
         updateSuggestionDisplay();
-        x = roundToNDecimals(operate(+x, operators[op], +y) + '', decimalFigures);
+        x = roundToNDecimals(operate(+x, operators[op], +y), decimalFigures) + '';
         op = EMPTY;
         y = EMPTY;
     }
@@ -66,6 +66,9 @@ function evaluate() {
 }
 
 function backspace() {
+
+    error = false;
+
     if (y) {
         y = y.slice(0, -1);
     } else if (op) {
@@ -140,3 +143,19 @@ document.querySelector('#controls').addEventListener('click', event => {
 
     respondToEvent(input);
 });
+
+document.addEventListener('keydown', event => {
+    let input = event.key;
+
+    if (input === '*') {
+        input = '×';
+    } else if (input === '/') {
+        input = '÷';
+    } else if (input === 'Backspace' || input === 'Delete') {
+        input = 'DEL';
+    } else if (input === 'Enter') {
+        input = '=';
+    }
+
+    respondToEvent(input);
+})
