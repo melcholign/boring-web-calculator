@@ -52,6 +52,7 @@ function operate(a, op, b) {
 }
 
 function evaluate() {
+
     if (x && op && y) {
         updateSuggestionDisplay();
         x = roundToNDecimals(operate(+x, operators[op], +y), decimalFigures) + '';
@@ -145,6 +146,9 @@ document.querySelector('#controls').addEventListener('click', event => {
 });
 
 document.addEventListener('keydown', event => {
+
+    event.preventDefault();
+
     let input = event.key;
 
     if (input === '*') {
