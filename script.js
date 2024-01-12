@@ -104,35 +104,39 @@ function roundToNDecimals(number, n) {
     return Math.floor(number * powerOfTen) / (powerOfTen);
 }
 
-document.querySelector('#controls').addEventListener('click', event => {
-    if (event.target.tagName !== 'BUTTON') return;
-
-    const btnTxt = event.target.textContent;
-
-    if ('0' <= btnTxt && btnTxt <= '9' || btnTxt === '.') {
+function respondToEvent(key) {
+    if ('0' <= key && key <= '9' || key === '.') {
 
         error = false;
 
         if (op) {
-            y = getModifiedNumber(y, btnTxt);
+            y = getModifiedNumber(y, key);
         } else {
-            x = getModifiedNumber(x, btnTxt);
+            x = getModifiedNumber(x, key);
         }
 
-    } else if (btnTxt in operators) {
+    } else if (key in operators) {
 
         if (y) {
             evaluate();
         }
 
         if (x) {
-            op = btnTxt;
+            op = key;
         }
 
-    } else if (btnTxt in actions) {
-        actions[btnTxt]();
+    } else if (key in actions) {
+        actions[key]();
     }
 
     updateSuggestionDisplay();
     updateCurrentDisplay();
+}
+
+document.querySelector('#controls').addEventListener('click', event => {
+    if (event.target.tagName !== 'BUTTON') return;
+
+    const key = event.target.textContent;
+
+    respondToEvent(key);
 });
